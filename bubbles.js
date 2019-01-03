@@ -84,7 +84,7 @@
             })
             .attr("cx", 100)
             .attr("cy", 300)
-            .style("stroke", "black")
+            .style("stroke", "#74b9ff")
             .on("mouseover", function () {
                 tooltip.style("display", null)
             })
@@ -92,21 +92,26 @@
                 tooltip.style("display", "none")
             })
             .on("mousemove", function (d) {
-                var xPos = d3.mouse(this)[0] - 15;
-                var yPos = d3.mouse(this)[1] - 55;
-                tooltip.attr("transform", "translate(" + xPos + "," + yPos + ")");
-                tooltip.select("text").text(d.name + " : " + d.decade);
+                tooltip.html("text").text(d.name + " : " + d.decade)
+            
+              
+                .style("top", d3.event.pageY + 20 + "px")
+                .style("left", d3.event.pageX + 50 + "px")
+                .style("opacity", 1);
             })
 
-            var tooltip = svg.append("g")
-            .attr("class", tooltip)
-            .style("display", "none");
+            var tooltip = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0)
+    
+           
 
             tooltip.append("text")
-            .attr("x", 15)
-            .attr("dy", "1.2em")
-            .style("font-size", "1.25em")
-            .attr("font-weight", "bold")
+                .attr("x", 15)
+                .attr("dy", "1.2em")
+                .style("font-size", "16px")
+                .attr("font-weight", "bold")
+            
 
 
 
