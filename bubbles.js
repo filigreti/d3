@@ -28,21 +28,22 @@
 
     var radiusScale = d3.scaleSqrt().domain([20, 350]).range([10, 80])
 
-    var forceX =  d3.forceX(function (d) {
-        if (d.decade === 'pre-2000'){
+    var forceX = d3.forceX(function (d) {
+        if (d.decade === 'pre-2000') {
             return 300
         } else {
             return 900
         }
-        return width / 2 }).strength(0.05)
-    
+        return width / 2
+    }).strength(0.05)
+
     var forceCollide = d3.forceCollide(function (d) {
         return radiusScale(d.sales) + 1
     })
 
 
     var simulation = d3.forceSimulation()
-        .force("x",forceX)
+        .force("x", forceX)
         .force("y", d3.forceY(height / 2).strength(0.05))
         .force("collide", forceCollide)
 
@@ -83,20 +84,45 @@
             })
             .attr("cx", 100)
             .attr("cy", 300)
+            .style("stroke", "black")
+            .on("mouseover", function () {
+                tooltip.style("display", null)
+            })
+            .on("mouseout", function () {
+                tooltip.style("display", "none")
+            })
+            .on("mousemove", function (d) {
+                var xPos = d3.mouse(this)[0] - 15;
+                var yPos = d3.mouse(this)[1] - 55;
+                tooltip.attr("transform", "translate(" + xPos + "," + yPos + ")");
+                tooltip.select("text").text(d.name + " : " + d.decade);
+            })
 
-        d3.select("#decade").on('click', function() {
+            var tooltip = svg.append("g")
+            .attr("class", tooltip)
+            .style("display", "none");
+
+            tooltip.append("text")
+            .attr("x", 15)
+            .attr("dy", "1.2em")
+            .style("font-size", "1.25em")
+            .attr("font-weight", "bold")
+
+
+
+        d3.select("#decade").on('click', function () {
             simulation
-            .force("x", forceX)
-            .alphaTarget(0.5)
-            .restart()
+                .force("x", forceX)
+                .alphaTarget(0.5)
+                .restart()
 
         })
 
-        d3.select('#combine').on('click', function(){
+        d3.select('#combine').on('click', function () {
             simulation
-            .force("x", d3.forceX(width / 2).strength(0.05))
-            .alphaTarget(0.5)
-            .restart()
+                .force("x", d3.forceX(width / 2).strength(0.05))
+                .alphaTarget(0.5)
+                .restart()
         })
 
 
