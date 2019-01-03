@@ -92,7 +92,7 @@
                 tooltip.style("display", "none")
             })
             .on("mousemove", function (d) {
-                tooltip.html("text").text(d.name + " : " + d.decade)
+                tooltip.html("text").text(d.name + " : " + d.bio)
             
               
                 .style("top", d3.event.pageY + 20 + "px")
@@ -108,8 +108,8 @@
 
             tooltip.append("text")
                 .attr("x", 15)
-                .attr("dy", "1.2em")
-                .style("font-size", "16px")
+                .attr("dy", "1.6em")
+                .style("font-size", "30px")
                 .attr("font-weight", "bold")
             
 
