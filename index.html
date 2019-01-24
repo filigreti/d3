@@ -2,9 +2,85 @@
 <html>
 
 <head>
+  <link href="https://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet">
   <meta charset="utf-8">
-  <style>  
+  <style> 
+#sub-header{
+display: flex;
+justify-content: flex-start;
+width:80%;
+padding-top: 10px;
+}
+.w3-bar{
+  display: flex;
+  
+}
+.w3-button{
+  padding:15px;
+  margin:0;
+  font-family: 'comfortaa';
+  border: 1px solid grey;
+  text-transform: uppercase;
+  color:#34495e;
+  font-weight: 700;
+  background: #F7F7F7;
+  filter: blur(0.05px)
+}
+.w3-button:focus{
+  outline: none;
+  box-shadow: 0px 0px 2px blue;
+}
+.all{
 
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-right: none
+}
+.active{
+  background: #34495e;
+  color:white
+}
+.keywords{
+border-top-right-radius: 10px;
+border-bottom-right-radius: 10px;
+
+
+
+}
+.newtool{
+  border:2px solid red
+}
+
+
+#header{
+  text-align: center;
+  border-bottom: 1px solid grey;
+
+}
+.links line {
+  stroke: #999;
+  stroke-opacity: 0.6;
+}
+
+.nodes circle {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+text {
+  font-family: sans-serif;
+  font-size: 10px;
+}
+
+
+#header *{
+  margin: 15px !important;
+  font-weight: 300
+}
+  body{
+    font-family: 'comfortaa';
+
+  }
     .tooltip { 
       background: rgb(252, 248, 248);
       color: #000; 
@@ -25,23 +101,17 @@
       padding-left:5px;
     }
      
-    main {
-      display: flex;      
-      width:95%;
-      float:right;
-    }
+
 
     aside {
       border: 1px solid #ccc;
       display: flex; 
-      width: 100%;
+      width: 80%;
       background:rgb(236, 235, 235);
-      height:contain;
-      margin:auto 30px; 
+      margin:auto 15px; 
     }
 
     .detail-panel {
-      margin: auto;
       width: 100%;
     }
 
@@ -114,75 +184,62 @@
     } 
     #bio-section p{
       font-weight:800;
-    }  
-    tr,td, th{
-      background-color:rgb(88, 85, 85);
-      color:white;
-      height:40px;
-      padding:0 5px; 
     } 
     .table{
-      background-color:rgb(252, 237, 239);
-      color:white;
-      height:40px; 
-      width:15%;  
+      text-decoration: none; 
       font-size: 12px; 
       position: absolute;
       text-align: center;
-      top: 40px; 
-      left:20px;  
+      top: 95px; 
+      left:10px; 
+      width: 14rem;
       font-size: 16px
+    } 
+    tr,td, th{
+      background-color:brown;
+      color:white;
+      height:40px;
+      padding:0 20px; 
+    } 
+    table{
+      background-color:pink;
+      color:white;
+      height:40px; 
     }
-.entities-list-container{
-  position:absolute;
-  top:0;
-  left:0;
-  width:15%;
-  margin-left:20px;
-}
-.entities-list-container h2{ 
-  font-size:1rem; 
-  color:black;  
-}
-.entities-key{  
-  display:flex;
-}
-.entities-list-container .entities-list-image{
-  width:10%;
-}
-.entities-list-container .entities-list-image img{
-  width:100%;
-  height:15px;
-  margin:0;
-  padding:0;
-  background-size: contain;
-  border: 1px solid #ccc;
-} 
-.entities-list-container .entities-list-name h6{
-  width:100%; 
-  font-size:12px; 
-  margin:0; 
-  padding:3px 0;
-  padding-left:15px; 
-  height:15px; 
-} 
+    #chart{
+      margin:0;
+      padding:0
+    }
+    #All{
+  
+      display: flex;
+      justify-content: space-between
+    }
+    #chart2{
+      min-height:50vh;
+
+
+    }
   </style>
 
 </head>
 
 <body>  
-  <main>
-    <sidebar> 
-      <section class = "entities-list-container">
-        <h2>Represented Entities</h2>
-        <div class="entities-key">
-          <div class="entities-list-image"> </div>
-          <div class="entities-list-name"> </div>
-        </div>  
-      </section> 
-    </sidebar>
+  <div id="header">
+    <h2>INTERACTIVE BUBBLE CHART FOR MOST TRENDING HEADLINES</h2>
+    <h3>List of the most trending headlines on Bloverse</h3>
+  </div>
+  <div id="sub-header">
+      <div class="w3-bar w3-black">
+          <button class="all w3-button active" onclick="openCity('All')">All</button>
+          <button class="persons w3-button" onclick="openCity('Persons')">Persons</button>
+          <button class="organ w3-button" onclick="openCity('Organizations')">Organizations</button>
+          <button class="keywords w3-button" onclick="openCity('Keywords')">Keywords</button>
+        </div>
+  </div>
+  <main id="All" class="city">
     <div id="chart"></div>
-    <aside>
+    <aside id="aside">
       <div class="detail-panel">
         <div class="panel-head">
           <span id="articles">Articles</span><span id = "info">Info</span>
@@ -209,12 +266,71 @@
       </div>
     </aside>
   </main>
+  <div id="chart2" style="display:none">
+    <button onclick="goBack()">Go back</button>
+    <svg>
+    </svg>
+    </div>
+  <main id="Persons" class="city" style="display:none">
+    This is for persons
+  </main>
+  <main id="Organizations" class="city" style="display:none">
+      This is for Organizations
+    </main>
+    <main id="Keywords" class="city" style="display:none">
+        This is for keywords
+      </main>
   
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.2/d3.min.js"></script>
   <script src="https://d3js.org/d3-force.v1.min.js"></script>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+
   <!--<script src="bubbles.js"></script>-->
   <script src="new.js"></script>
+  <script>
+  function openCity(cityName) {
+  var i;
+  var x = document.getElementsByClassName("city");
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";  
+  }
+  document.getElementById(cityName).style.display = "block";  
+}
+var btnContainer = document.getElementById("sub-header");
+
+// Get all buttons with class="btn" inside the container
+var btns = btnContainer.getElementsByClassName("w3-button");
+
+// Loop through the buttons and add the active class to the current/clicked button
+for (var i = 0; i < btns.length; i++) {
+  btns[i].addEventListener("click", function() {
+    var current = document.getElementsByClassName("active");
+    current[0].className = current[0].className.replace(" active", "");
+    this.className += " active";
+  });
+}
+  
+  function goBack(){
+    var x = document.getElementById("aside")
+    var y = document.getElementById("sub-header")
+    var z = document.getElementById("chart")
+    var a = document.getElementById("chart2")
+    
+
+    if (x.style.display === "none") {
+    x.style.display = "block";
+    y.style.display = "block";
+    z.style.display = "block";
+    a.style.display = "none";
+  } else {
+    x.style.display = "none";
+  }
+  
+  }
+
+  
+  </script>
 </body>
 
 </html>
