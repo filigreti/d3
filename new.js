@@ -9,21 +9,7 @@
         .append("g")
         .attr("transform", "translate(0,0)")
 
-    var defs = svg.append("defs");
-    // defs.append("pattern")
-    //     .attr("id", "jon-snow")
-    //     .attr("height", "100%")
-    //     .attr("width", "100%")
-    //     .attr("patternContentUnits", "objectBoundingBox")
-    //     .append("image")
-    //     .attr("height", 1)
-    //     .attr("width", 1)
-    //     .attr("preserveAspectRatio", "none")
-    //     .attr("xmlns:xlink", "http://www.w3.org/1999/xlink")
-    //     .attr("xlink:href", "")
-
-   
-
+    var defs = svg.append("defs"); 
 
     var radiusScale = d3.scaleSqrt().domain([20, 250]).range([10, 60])
 
@@ -32,9 +18,8 @@
     }).strength(0.07)
 
     var forceCollide = d3.forceCollide(function (d) {
-        return radiusScale(d.articles.score) + 1
+        return radiusScale(d.articles.score) + 2
     })
-
 
     var simulation = d3.forceSimulation()
         .force("x", forceX)
@@ -66,6 +51,8 @@
         let panelBody = d3.select(".panel-body")
         let panelHead = d3.select(".panel-head")
         let articleList = panelBody.select('.article-list')
+        let entitiesList = d3.select('.entities-list-image').selectAll("li")
+        let entitiesListName = d3.select('.entities-list-name').selectAll("h6")
         let tabTwo = panelBody.select('.tab-two')
         let tabOne = panelBody.select('.tab-one')
 
@@ -80,6 +67,8 @@
         let entityTotalQuotes = tabTwo.select('#bio-section').select('p:nth-of-type(4)')
         let entityBio = tabTwo.select('#bio-section').select('p:nth-of-type(5)') 
 
+     
+        //Return the most trending comments
         articleList.selectAll("li")
           .data(sortedQuotes.slice(0, 7))
           .enter()
@@ -87,6 +76,24 @@
           .text(quote => {
             return quote.quote
           })
+          
+        //Add Entities images in the key entities
+        entitiesList
+          .data(datapoints)
+          .enter()
+          .append("img")
+          .attr('src', function (d) {
+            return d.image_path;
+          }) 
+    
+        entitiesListName
+          .data(datapoints)
+          .enter()
+          .append("h6")
+          .text(function (d) {
+            return d.name;
+          }) 
+        
 
         defs.selectAll(".artist-pattern")
             .data(datapoints)
@@ -112,22 +119,48 @@
         var circles = svg.selectAll(".artist")
             .data(datapoints)
             .enter().append("circle")
-            .attr("class", "artist")
+            .classed("artist", true)
+            .attr("stroke", "brown")
             .attr("r", function (d) {
                 return radiusScale(d.articles.score)
             })
             .attr("fill", function (d) {
                 return "url(#" + d.name.toLowerCase().replace(/ /g, "-") + ")"
-            }) 
-            .style("stroke", "#74b9ff")
+            })  
             .on("mouseover", function () {
-                tooltip.style("display", null)
+                tooltip.style("display", null) 
+                    // d3.select(this)
+                    //   .transition()
+                    //   .duration(500) 
+                    //   .attr('r', 60) 
+                    //   .attr("stroke-width", 5) 
+
+                    if (this !== d3.select('circle:last-child').node()) {
+                        this.parentElement.appendChild(this);
+                        d3.select(this)
+                          .transition()
+                          .duration(500) 
+                          .attr('r', 70)
+                          .attr("stroke-width", 5) 
+                      } 
+                  
             })
+            
             .on("mouseout", function () {
                 tooltip.style("display", "none")
+                d3.select(this)
+                    .transition()
+                    .duration(2000)
+                    .attr('r', function(d){
+                        return radiusScale(d.articles.score)
+                    }) 
+                    .attr("stroke-width", 1)
             })
             .on("mousemove", function (d) {
-                tooltip.html("text").text(d.name + " : " + d.bio)           
+                tooltip.html(
+                    '<b>' +  d.name + "</b>" + 
+                    "<br/>" +"<p>" + "Viewed by " + d.quotes.total + " people" + "</p>"
+                     + "<p>" + "Commented by " + d.age + " people" + "</p>")	     
                 .style("top", d3.event.pageY + 20 + "px")
                 .style("left", d3.event.pageX + 50 + "px")
                 .style("opacity", 1);
@@ -143,33 +176,18 @@
                 entityCountry.text("Country" +" " + ":" + " " + selectedEntity.country)
                 entityWorth.text("Est. Net Worth" + " " + ":" + " $" + selectedEntity.net_worth + "M")
                 entityTotalQuotes.text("Total Quotes" +" " + ":" + " " + selectedEntity.quotes.total)
-                entityBio.text(selectedEntity.bio)  
-              
-                    if (this !== d3.select('circle:last-child').node()) {
-                      this.parentElement.appendChild(this);
-                      d3.select(this)
-                        .transition()
-                        .duration(200)
-                        .style("")
-                        .attr('r', 100)
-                        .transition()
-                        .ease('elastic')
-                        .attr('r', 100);
-                    }
-                 
-            })
-            .on("mouseout", function () {
-                tooltip.style("display", "none")
-                d3.select(this)
-                    .transition()
-                    .duration(500)
-                    .attr('r', function(d){
-                        return radiusScale(d.articles.score)
-                    })
-            })
-         
+                entityBio.text(selectedEntity.bio) 
 
-            //apend a div on hover n each bubble
+                if (this == d3.select('circle:last-child').node()) {
+                    this.parentElement.appendChild(this);
+                    d3.select(this)
+                      .transition()
+                      .duration(500) 
+                      .attr('r', 100)
+                  } 
+            }); 
+
+            //apend a div on hover of each bubble
             var tooltip = d3.select("body").append("div")
             .attr("class", "tooltip")
             .style("opacity", 0)
@@ -179,7 +197,7 @@
                 .attr("dy", "1.6em")
                 .style("font-size", "30px")
                 .attr("font-weight", "bold") 
- 
+      
         //Make the bubbles stay combined
         simulation
                 .force("x", d3.forceX(width / 2).strength(0.05))
