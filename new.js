@@ -182,9 +182,11 @@
                 var tooltip = d3.select("body").append("div")
                 .attr("class", "chart2")
 
-                var svg = d3.select("#chart2"),
-                width = +svg.attr("width"),
-                height = +svg.attr("height");
+                // var svg = d3.select("#chart2"),
+                // width = +svg.attr("width"),
+                // height = +svg.attr("height");
+                var width = 400, height = 300
+
             let arr9 = []
             let arr = []
             let arr2 = []
@@ -196,132 +198,87 @@
             let arr8 = []
             let arr10 = []
 
+            console.log(arr3)
+    
              let network = [d.network]
              let nodes = d.network.nodes
              let links = d.network.links
-            let superlink = links.forEach(function(link){
-                arr7.push(link)
-            let supernodes = nodes.forEach(function(noded){
-                arr8.push(noded)
-            })
-                
-            })
+  
             
-          
-            
+ 
+
+            let links2 = links.forEach(function(link){
+                arr2.push(link)
+            })
+            let links3 = links.forEach(function(link){
+                arr3.push(link.source)
+            })
+            let links4 = links.forEach(function(link){
+                arr4.push(link.target)
+            })
         
              let node2 =  nodes.forEach(function(node){
                 //  return node.id
-                 arr.push(node.id)
-             })
-             let node3 =  nodes.forEach(function(node){
-            
-                 arr3.push(node.group)
-             })
-           
-             let link2 = links.forEach(function(link){
-                 arr2.push(link.value)
+                 arr.push(node)
              })
 
-             let link3 = links.forEach(function(link2){
-                 arr4.push(link2.source.x)
-                 
-             })
-             let link14 = links.forEach(function(link){
-                 arr9.push(link.source.y)
-             })
-            //  let link4 = links.forEach(function(link3){
-            //     arr5.push(link3.target.x)
-            // })
-            // let link15 = links.forEach(function(link3){
-            //     arr10.push(link3.target.y)
-            // })
-             let everything = network.forEach(function(every){
-                 arr6.push(every)
-                 return every
-             })
-             console.log(arr6)
-          
-             var color = d3.scaleOrdinal(d3.schemeCategory20);
-             
-             var simulation = d3.forceSimulation()
-            .force("link", d3.forceLink().arr)
-            .force("charge", d3.forceManyBody())
-            .force("center", d3.forceCenter(width / 2, height / 2));
+             var simulation = d3.forceSimulation(arr)
+                .force('charge', d3.forceManyBody().strength(-100))
+                .force('center', d3.forceCenter(width / 2, height / 2))
+                .force('link', d3.forceLink().links(arr2))
+                .on('tick', tickeded);
 
-            
+                function updateLinks() {
+                    
+                    var u = d3.select('.links')
+                      .selectAll('line')
+                    
+                    
+                  
+                    u.enter()
+                      .append('line')
+                      .merge(u)
+                      .attr('x1', arr3.x)
+                      .attr('y1', arr3.y)
+                      .attr('x2', arr4.x)
+                      .attr('y2', arr4.y)
+                  
+                    u.exit().remove()
+                    console.log(arr4)
+                  }
+                  function updateNodes() {
+                    u = d3.select('.nodes')
+                      .selectAll('text')
+                      .data(arr)
+                  
+                    u.enter()
+                      .append('text')
+                      .text(function(d) {
+                        return d.name
+                      })
+                      .merge(u)
+                      .attr('x', function(d) {
+                        return d.x
+                      })
+                      .attr('y', function(d) {
+                        return d.y
+                      })
+                      .attr('dy', function(d) {
+                        return 5
+                      })
+                  
+                    u.exit().remove()
+                  }
+                  
+                  function tickeded() {
+                    updateLinks()
+                    updateNodes()
+                  }
 
-             var link = svg.append("g")
-             .attr("class", "links")
-             .selectAll("line")
-             .data(arr7)
-             .enter()
-             .append("line")
-             .attr("stroke-width", Math.sqrt());
-             
-             var node = svg.append("g")
-             .attr("class", "nodes")
-           .selectAll("g")
-           .data(nodes)
-           .enter().append("g")
-
-           var circles = node.append("circle")
-           .attr("r", 5)
-           .attr("fill", color(arr3))
-           .call(d3.drag()
-               .on("start", dragstarted)
-               .on("drag", dragged)
-               .on("end", dragended));
-
-            var lables = node.append("text")
-               .text(arr)
-               .attr('x', 6)
-               .attr('y', 3);
-
-               node.append("title")
-               .text(arr);
-              
-
-               simulation
-               .nodes(arr8)
-               .on("tick", ticked);
-              
-            
-                simulation.force("link")
-                .links(arr7);
-                
-               
-
-               function ticked() {
-                link
-                    .attr("x1", arr4)
-                    .attr("y1", arr9)
-                    .attr("x2", arr5)
-                    .attr("y2", arr10)
-            
-                node
-                    .attr("transform", "translate(" + arr6.x + "," + arr6.y + ")")
-              }
-              function dragstarted() {
-                if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-                arr6.fx = arr6.x;
-                arr6.fy = arr6.y;
-              }
-              function dragged() {
-                arr6.fx = d3.event.x;
-                arr6.fy = d3.event.y;
-              }
-              function dragended() {
-                if (!d3.event.active) simulation.alphaTarget(0);
-                arr6.fx = null;
-                arr6.fy = null;
-              }
-              
-              
-            
+        
          
          })
-   
+ 
             
 
             //apend a div on hover of each bubble

@@ -27,56 +27,24 @@
         },
     "network": {
       "nodes": [
-        {
-          "id": "Peter",
-          "group": 1
-        },
-        {
-          "id": "Michael",
-          "group": 1
-        },
-        {
-          "id": "Neo4j",
-          "group": 3
-        },
-        {
-          "id": "Graph Database",
-          "group": 4
-        }
+        {"name": "A"},
+        {"name": "B"},
+        {"name": "C"},
+        {"name": "D"},
+        {"name": "E"},
+        {"name": "F"},
+        {"name": "G"},
+        {"name": "H"}
       ],
       "links": [
-        {
-          "source": "Napoleon",
-          "value": 1
-        },
-        {
-          "source": "Dracula",
-          "value": 5
-        },
-        {
-          "source": "Vampire",
-          "value": 7
-        },
-        {
-          "source": "Bloomberg",
-          "value": 1
-        },
-        {
-          "source": "Napoleon",
-          "value": 1
-        },
-        {
-          "source": "Dracula",
-          "value": 5
-        },
-        {
-          "source": "Vampire",
-          "value": 7
-        },
-        {
-          "source": "Bloomberg",
-          "value": 1
-        }
+        {"source": 0, "target": 1},
+        {"source": 0, "target": 2},
+        {"source": 0, "target": 3},
+        {"source": 1, "target": 6},
+        {"source": 3, "target": 4},
+        {"source": 3, "target": 7},
+        {"source": 4, "target": 5},
+        {"source": 4, "target": 7}
       ]
     }
   },
