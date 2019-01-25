@@ -27,14 +27,14 @@
         },
     "network": {
       "nodes": [
-        {"name": "A"},
-        {"name": "B"},
-        {"name": "C"},
-        {"name": "D"},
-        {"name": "E"},
-        {"name": "F"},
-        {"name": "G"},
-        {"name": "H"}
+        {"name": "Udeme"},
+        {"name": "Amin"},
+        {"name": "Charles"},
+        {"name": "John"},
+        {"name": "Oyin"},
+        {"name": "Habib"},
+        {"name": "Rilwan"},
+        {"name": "Lucky"}
       ],
       "links": [
         {"source": 0, "target": 1},

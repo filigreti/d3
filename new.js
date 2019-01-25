@@ -198,7 +198,7 @@
             let arr8 = []
             let arr10 = []
 
-            console.log(arr3)
+         
     
              let network = [d.network]
              let nodes = d.network.nodes
@@ -206,7 +206,7 @@
   
             
  
-
+            console.log(arr2)
             let links2 = links.forEach(function(link){
                 arr2.push(link)
             })
@@ -223,37 +223,66 @@
              })
 
              var simulation = d3.forceSimulation(arr)
-                .force('charge', d3.forceManyBody().strength(-100))
+                .force('charge', d3.forceManyBody().strength(-300))
                 .force('center', d3.forceCenter(width / 2, height / 2))
                 .force('link', d3.forceLink().links(arr2))
-                .on('tick', tickeded);
+                .on('tick', tickeded)
+                
+
+
 
                 function updateLinks() {
-                    
                     var u = d3.select('.links')
                       .selectAll('line')
-                    
-                    
+                      .data(arr2)
                   
                     u.enter()
                       .append('line')
                       .merge(u)
-                      .attr('x1', arr3.x)
-                      .attr('y1', arr3.y)
-                      .attr('x2', arr4.x)
-                      .attr('y2', arr4.y)
+                      .attr('x1', function(d) {
+                        return d.source.x
+                      })
+                      .attr('y1', function(d) {
+                        return d.source.y
+                      })
+                      .attr('x2', function(d) {
+                        return d.target.x
+                      })
+                      .attr('y2', function(d) {
+                        return d.target.y
+                      })
                   
                     u.exit().remove()
-                    console.log(arr4)
                   }
+
+                // function updateLinks() {
+                    
+                //     var u = d3.select('.links')
+                //       .selectAll('line')
+                    
+                    
+                  
+                //     u.enter()
+                //       .append('line')
+                //       .merge(u)
+                //       .attr('x1', arr3.x)
+                //       .attr('y1', arr3.y)
+                //       .attr('x2', arr4.x)
+                //       .attr('y2', arr4.y)
+                  
+                //     u.exit().remove()
+                    
+                //   }
                   function updateNodes() {
                     u = d3.select('.nodes')
                       .selectAll('text')
                       .data(arr)
                   
+                  
                     u.enter()
                       .append('text')
                       .text(function(d) {
+                       
                         return d.name
                       })
                       .merge(u)
@@ -264,7 +293,7 @@
                         return d.y
                       })
                       .attr('dy', function(d) {
-                        return 5
+                        return 25
                       })
                   
                     u.exit().remove()
