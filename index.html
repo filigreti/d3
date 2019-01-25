@@ -55,12 +55,14 @@ border-bottom-right-radius: 10px;
 
 #chart2 circle {
   fill: cadetblue;
+  cursor: pointer;
+  
 }
 #chart2 text {
   text-anchor: middle;
   font-family: "Helvetica Neue", Helvetica, sans-serif;
-  fill: #666;
-  font-size: 10px;
+  fill: white;
+  font-size: 20px;
 }
 
 .newtool{
@@ -77,7 +79,7 @@ border-bottom-right-radius: 10px;
 
 text {
   font-family: sans-serif;
-  font-size: 10px;
+  font-size: 20px;
 }
 
 
@@ -276,10 +278,6 @@ text {
   </main>
   <div id="chart2" style="display:none">
     <button onclick="goBack()">Go back</button>
-    <svg width="400" height="300">
-      <g class="links"></g>
-      <g class="nodes"></g>
-    </svg>
     </div>
   <main id="Persons" class="city" style="display:none">
     This is for persons
@@ -294,6 +292,7 @@ text {
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.2/d3.min.js"></script>
   <script src="https://d3js.org/d3-force.v1.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
   <!--<script src="bubbles.js"></script>-->
   <script src="new.js"></script>

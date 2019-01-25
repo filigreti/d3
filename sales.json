@@ -26,25 +26,22 @@
                    ]
         },
     "network": {
-      "nodes": [
-        {"name": "Udeme"},
-        {"name": "Amin"},
-        {"name": "Charles"},
-        {"name": "John"},
-        {"name": "Oyin"},
-        {"name": "Habib"},
-        {"name": "Rilwan"},
-        {"name": "Lucky"}
+      "nodes":[
+        {"id": "Udeme", "group": 1},
+        {"id": "Bloverse", "group": 2},
+        {"id": "Amin", "group": 2},
+        {"id": "Photo-Contest", "group": 2},
+        {"id": "Hockey", "group": 2},
+        {"id": "Nigeria", "group": 2},
+        {"id": "Journalist", "group": 2}
       ],
-      "links": [
-        {"source": 0, "target": 1},
-        {"source": 0, "target": 2},
-        {"source": 0, "target": 3},
-        {"source": 1, "target": 6},
-        {"source": 3, "target": 4},
-        {"source": 3, "target": 7},
-        {"source": 4, "target": 5},
-        {"source": 4, "target": 7}
+      "links":[
+        {"source": "Udeme", "target": "Bloverse", "value": 1},
+        {"source": "Udeme", "target": "Amin", "value": 1},
+        {"source": "Udeme", "target": "Photo-Contest", "value": 1},
+        {"source": "Udeme", "target": "Hockey", "value": 1},
+        {"source": "Udeme", "target": "Nigeria", "value": 1},
+        {"source": "Udeme", "target": "Journalist", "value": 1}
       ]
     }
   },

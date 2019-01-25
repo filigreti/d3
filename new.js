@@ -182,10 +182,29 @@
                 var tooltip = d3.select("body").append("div")
                 .attr("class", "chart2")
 
-                // var svg = d3.select("#chart2"),
-                // width = +svg.attr("width"),
-                // height = +svg.attr("height");
-                var width = 400, height = 300
+                var wid = $('body').width();
+                var hit = 500
+
+
+                var mapOptions = {
+                    width: wid,
+                    height: hit,
+                    nodeRadius: 70,
+                    nodeStroke: 'white',
+                    nodeStrokeWidth: 2,
+                    getColor: function(group) {
+                      return (group == 1) ? '#34495e' : '#16a085'; 
+                    }
+                  };
+
+                  var svg = d3.select('#chart2')
+                  .append('svg')
+                  .attr('width', mapOptions.width)
+                  .attr('height', mapOptions.height);
+
+
+                  var collide = d3.forceCollide(mapOptions.nodeRadius*1.5);
+         
 
             let arr9 = []
             let arr = []
@@ -204,9 +223,6 @@
              let nodes = d.network.nodes
              let links = d.network.links
   
-            
- 
-            console.log(arr2)
             let links2 = links.forEach(function(link){
                 arr2.push(link)
             })
@@ -222,90 +238,119 @@
                  arr.push(node)
              })
 
-             var simulation = d3.forceSimulation(arr)
-                .force('charge', d3.forceManyBody().strength(-300))
-                .force('center', d3.forceCenter(width / 2, height / 2))
-                .force('link', d3.forceLink().links(arr2))
-                .on('tick', tickeded)
+             let node3 = nodes.forEach(function(node){
+                arr5.push(node.id)
+             })
+             let links5 = links.forEach(function(link){
+                 arr6.push(link.value)
+             })
+             let node6 = nodes.forEach(function(link){
+                 arr7.push(link.group)
+             })
+            
+            //  var simulation = d3.forceSimulation(arr)
+            //     .force('charge', d3.forceManyBody().strength(-300))
+            //     .force('center', d3.forceCenter(width / 2, height / 2))
+            //     .force('link', d3.forceLink().links(arr2))
+            //     .on('tick', tickeded)
                 
-
-
-
-                function updateLinks() {
-                    var u = d3.select('.links')
-                      .selectAll('line')
-                      .data(arr2)
-                  
-                    u.enter()
-                      .append('line')
-                      .merge(u)
-                      .attr('x1', function(d) {
-                        return d.source.x
-                      })
-                      .attr('y1', function(d) {
-                        return d.source.y
-                      })
-                      .attr('x2', function(d) {
-                        return d.target.x
-                      })
-                      .attr('y2', function(d) {
-                        return d.target.y
-                      })
-                  
-                    u.exit().remove()
-                  }
-
-                // function updateLinks() {
+                var simulation = d3.forceSimulation(arr)
+                .force("link", d3.forceLink().id(function(d) {
+                    return d.id; }))
+                .force("charge", d3.forceManyBody())
+                .force("center", d3.forceCenter(mapOptions.width / 2, mapOptions.height / 2))
+                .force("collide", collide);
                     
-                //     var u = d3.select('.links')
-                //       .selectAll('line')
-                    
-                    
-                  
-                //     u.enter()
-                //       .append('line')
-                //       .merge(u)
-                //       .attr('x1', arr3.x)
-                //       .attr('y1', arr3.y)
-                //       .attr('x2', arr4.x)
-                //       .attr('y2', arr4.y)
-                  
-                //     u.exit().remove()
-                    
-                //   }
-                  function updateNodes() {
-                    u = d3.select('.nodes')
-                      .selectAll('text')
-                      .data(arr)
-                  
-                  
-                    u.enter()
-                      .append('text')
-                      .text(function(d) {
-                       
-                        return d.name
-                      })
-                      .merge(u)
-                      .attr('x', function(d) {
-                        return d.x
-                      })
-                      .attr('y', function(d) {
-                        return d.y
-                      })
-                      .attr('dy', function(d) {
-                        return 25
-                      })
-                  
-                    u.exit().remove()
-                  }
-                  
-                  function tickeded() {
-                    updateLinks()
-                    updateNodes()
-                  }
+                var square_roots = []
+                arr6.forEach(function(v) {
+                    let root = Math.sqrt(v)
+                    square_roots.push(root)
+                })
+                var link = svg.append("g")
+                    .attr("class", "links")
+                    .selectAll("line")
+                    .data(arr2)
+                    .enter().append("line")
+                    .attr("stroke-width", square_roots)
+                    .attr("stroke", 'white')
+                
+                    var node = svg.append("g")
+                    .attr("class", "nodes")
+                    .selectAll("circle")
+                    .data(arr)
+                    .enter().append("circle")
+                    .attr('class', 'node')
+                      .attr('stroke', mapOptions.nodeStroke)
+                      .attr('stroke-width', mapOptions.nodeStrokeWidth)
+                      .attr("r", mapOptions.nodeRadius)
+                      .attr("fill",  mapOptions.getColor(arr7))
+                      .call(d3.drag()
+                          .on("start", dragstarted)
+                          .on("drag", dragged)
+                          .on("end", dragended));
 
-        
-         
+                          var texts = svg.selectAll('text.node-label')
+                            .data(arr)
+                            .enter().append('text')
+                            .attr('class', 'node-label')
+                            .attr('fill', 'white')
+                            .attr('dy', '0.35em')
+                            .text(function(d){
+                                return d.id
+                            });
+                          
+
+                
+                  
+                          simulation
+                            .nodes(arr)
+                            .on("tick", ticked);
+                      
+              
+                        simulation.force("link")
+                            .links(arr2);
+                            
+                          
+                            function ticked() {
+                                  
+
+                                link.attr("x1", function(d) { return d.source.x; })
+                                    .attr("y1", function(d) { return d.source.y; })
+                                    .attr("x2", function(d) { return d.target.x; })
+                                    .attr("y2", function(d) { return d.target.y; });
+                                 
+                              
+                                node.attr("cx", function(d) { return d.x; })
+                                    .attr("cy", function(d) { return d.y; });
+                              
+                                texts.attr('transform', function(d) {
+                                      return 'translate(' + d.x + ',' + d.y + ')';
+                                    })
+                              }
+                              function dragstarted(d) {
+                                if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+                                d.fx = d.x;
+                                d.fy = d.y;
+                              }
+                              
+                              function dragged(d) {
+                                d.fx = d3.event.x;
+                                d.fy = d3.event.y;
+                              }
+                              
+                              function dragended(d) {
+                                if (!d3.event.active) simulation.alphaTarget(0);
+                                d.fx = null;
+                                d.fy = null;
+                              }
+
+                          
+                          
+                      
+                          
+
+
+             
          })
  
             
